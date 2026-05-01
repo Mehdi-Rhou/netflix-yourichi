@@ -514,7 +514,7 @@ const app = {
             </div>
           </div>
           <div class="stream-buttons">
-            <button class="btn btn-red btn-xs" onclick="event.stopPropagation(); window.open('https://webtor.io/#/show?magnet=' + encodeURIComponent('${magnet.replace(/'/g, "\\'")}'), '_blank')">⬇ Download</button>
+            <a href="${magnet}" class="btn btn-secondary btn-xs">⬇ Magnet</a>
           </div>
         `;
         list.appendChild(div);
