@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEHDI-FLIX - Unlimited Movies & TV Shows</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css?v=18">
+
+  <!-- HLS Player -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand" onclick="app.showHome()">MEHDI-FLIX</div>
+    <div class="nav-links" id="navLinks">
+      <a href="#" class="active" onclick="app.showHome(event)">Home</a>
+      <a href="#" onclick="app.filterType('tv', event)">Series</a>
+      <a href="#" onclick="app.filterType('movie', event)">Movies</a>
+      <a href="#" onclick="app.filterType('anime', event)">Anime</a>
+    </div>
+    <div class="nav-right">
+      <div class="search-wrapper" id="searchWrap">
+        <button class="search-toggle" id="searchBtn">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+          </svg>
+        </button>
+        <div class="search-input-wrap">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+          </svg>
+          <input type="text" id="searchInput" placeholder="Titles, people, genres...">
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SEARCH RESULTS -->
+  <div class="search-page" id="searchPage">
+    <h2>Search Results</h2>
+    <div class="results-grid" id="searchGrid"></div>
+  </div>
+
+  <!-- MAIN APP CONTENT -->
+  <main id="mainContent">
+
+    <!-- HERO SECTION -->
+    <div class="hero">
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-content">
+        <div class="hero-badge">⭐ Featured Content</div>
+        <h1 class="hero-title" id="heroTitle">...</h1>
+        <div class="hero-meta" id="heroMeta"></div>
+        <p class="hero-overview" id="heroOverview">...</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="heroWatchBtn">
+            <svg viewBox="0 0 24 24" style="fill:currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg> Play
+          </button>
+          <button class="btn btn-secondary">
+            <svg viewBox="0 0 24 24" style="fill:currentColor">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+            </svg> More Info
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GENRE TABS -->
+    <div class="genre-bar" id="genreBar"></div>
+
+    <!-- DYNAMIC CONTENT ROWS -->
+    <div id="rowsContainer">
+      <!-- Loading Skeleton for Rows -->
+      <div class="content-section" style="padding-left:48px; padding-right:48px;">
+        <div class="skeleton" style="width:200px; height:24px; margin-bottom:12px;"></div>
+        <div style="display:flex; gap:8px;">
+          <div class="skeleton card"></div>
+          <div class="skeleton card"></div>
+          <div class="skeleton card"></div>
+          <div class="skeleton card"></div>
+          <div class="skeleton card"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MOVIE / SHOW MODAL -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" id="modalBox">
+      <button class="modal-close" id="modalClose">✕</button>
+
+      <div class="modal-banner">
+        <img id="modalBannerImg" src="" alt="Banner">
+      </div>
+
+      <div class="modal-header">
+        <h2 class="modal-movie-title" id="modalTitle">...</h2>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="modalWatchBtn">
+            <svg viewBox="0 0 24 24" style="fill:currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg> Watch
+          </button>
+          <button class="btn btn-secondary btn-sm"
+            style="border-radius:50%;width:42px;height:42px;padding:0;justify-content:center;">+</button>
+        </div>
+
+        <div class="modal-grid">
+          <div class="modal-left">
+            <div class="hero-meta" id="modalMeta" style="margin-bottom:16px;"></div>
+            <p class="modal-overview" id="modalOverview">...</p>
+
+            <!-- TV SHOW SEASONS -->
+            <div class="season-picker" id="episodesSection" style="display:none;">
+              <h3>Episodes</h3>
+              <div class="season-tabs" id="seasonTabs"></div>
+              <div class="episodes-list" id="episodesList"></div>
+            </div>
+
+            <!-- STREAMING LINKS -->
+            <div class="streams-section" id="streamsSection">
+              <h3>Available Streams <span style="font-size:0.75rem;font-weight:400;color:#777;margin-left:auto">(Powered
+                  by Torrentio)</span></h3>
+              <div class="streams-list" id="streamsList"></div>
+            </div>
+
+
+          </div>
+
+          <div class="modal-right">
+            <div class="modal-details" id="modalDetails"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN VIDEO PLAYER -->
+  <div class="video-player-overlay" id="videoPlayerOverlay">
+    <div class="player-topbar">
+      <button class="player-back-btn" id="playerBackBtn">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+        </svg>
+      </button>
+      <div class="player-now-playing">
+        <span class="player-label">Now Playing</span>
+        <span class="player-title-text" id="playerTitleText">...</span>
+      </div>
+      <div class="player-topbar-right">
+        <button class="player-fullscreen-btn" id="playerFullscreenBtn" title="Toggle Fullscreen">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="player-iframe-container" id="playerIframeContainer">
+      <div class="player-loading" id="playerLoading">
+        <div class="player-loading-spinner"></div>
+        <p>Loading player...</p>
+      </div>
+      <iframe id="playerIframe" allowfullscreen
+        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      <video id="customVideoPlayer" class="hidden" controls playsinline></video>
+    </div>
+
+    <div class="player-source-bar" id="playerSourceBar">
+      <span class="source-bar-label">Source:</span>
+      <div class="source-tabs" id="sourceTabs"></div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div class="toast" id="toast"></div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <a href="#">FAQ</a>
+      <a href="#">Help Center</a>
+      <a href="#">Account</a>
+      <a href="#">Media Center</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Privacy</a>
+      <a href="#">Cookie Preferences</a>
+      <a href="#">Corporate Information</a>
+    </div>
+    <p class="footer-copy">© 2026 StreamFlix. TMDB API and Torrentio integration demo.</p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
+  <script src="js/api.js?v=42"></script>
+  <script src="js/app.js?v=42"></script>
+</body>
+
+</html>
