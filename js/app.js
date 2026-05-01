@@ -288,14 +288,16 @@ const app = {
 
     return `
       <div class="card" onclick="app.openModal(${item.id}, '${type}')">
-        <img src="${img}" alt="${title}" loading="lazy">
-        <div class="card-overlay">
-          <div class="card-actions">
-            <div class="card-btn play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-            <div class="card-btn"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
+        <div class="card-inner">
+          <img src="${img}" alt="${title}" loading="lazy">
+          <div class="card-overlay">
+            <div class="card-actions">
+              <div class="card-btn play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+              <div class="card-btn"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
+            </div>
+            <div class="card-title">${title}</div>
+            <div class="card-meta"><span class="rating">${vote} Match</span><span>${year}</span></div>
           </div>
-          <div class="card-title">${title}</div>
-          <div class="card-meta"><span class="rating">${vote} Match</span><span>${year}</span></div>
         </div>
       </div>
     `;
