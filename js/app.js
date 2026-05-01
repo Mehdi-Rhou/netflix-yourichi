@@ -514,7 +514,7 @@ const app = {
             </div>
           </div>
           <div class="stream-buttons">
-            <a href="${magnet}" class="btn btn-secondary btn-xs">⬇ Magnet</a>
+            <a href="https://webtor.io/#/show?magnet=${encodeURIComponent(magnet)}" target="_blank" rel="noopener" class="btn btn-red btn-xs">⬇ Download</a>
           </div>
         `;
         list.appendChild(div);
